@@ -31,9 +31,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
+    "djoser",
+    "drf_yasg",
+    "corsheaders",
     "users",
     "ads",
     "redoc",
+    "django_filters",
 ]
 
 
@@ -53,7 +58,7 @@ ROOT_URLCONF = "skymarket.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates'), ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -70,9 +75,19 @@ WSGI_APPLICATION = "skymarket.wsgi.application"
 
 # TODO здесь мы настраиваем аутентификацию и пагинацию
 REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 4,
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
 # TODO здесь мы настраиваем Djoser
 DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.UserRegistrationSerializer',
+        'current_user': 'users.serializers.CurrentUserSerializer'
+    },
+    'LOGIN_FIELD': 'email'
 }
 
 # Database
@@ -131,8 +146,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "django_static")
 MEDIA_URL = "/django_media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "django_media")
 
+
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -149,3 +166,5 @@ EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
+
+AUTH_USER_MODEL = "users.User"
