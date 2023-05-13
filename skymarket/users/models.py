@@ -20,7 +20,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=100, db_index=True, unique=True)
     role = models.CharField(max_length=25, choices=UserRoles.choices, default=UserRoles.USER)
     image = models.ImageField(upload_to="users_img/", null=True, blank=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     @property
     def is_superuser(self):
